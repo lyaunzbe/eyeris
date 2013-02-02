@@ -15,6 +15,7 @@ cache.reddit.body = null;
 var reddit = function(action, page, callback){
   var now = moment(new Date());
   if(action == 'init' || now.diff(cache.reddit.lastReq,'seconds') > 30){
+    console.log('Using Request');
     var count = page * 5;
     opts ={
       uri: 'http://www.reddit.com/r/programming/hot.json',
@@ -23,16 +24,17 @@ var reddit = function(action, page, callback){
         limit: 100
       }
     };
-    
+    request.get(opts, function(e,r,body){
+      cache.reddit.body = body;
+      cache.reddit.lastReq = moment(new Date());
+      if(e) callback(e);
+        callback(null, cache.reddit.body);    
+    });
+
   }else{
-    console.log('Usig Cache');
+    console.log('Using Cache');
     callback(null, cache.reddit.body);        
   }
-  request.get(opts, function(e,r,body){
-    cache.reddit.body = body;
-    if(e) callback(e);
-    callback(null, cache.reddit.body);    
-  });
 };
 
 var hn = function(page, callback){
@@ -41,11 +43,18 @@ var hn = function(page, callback){
 };
 
 var dispatch = function(page, action){
-  console.log(action);
+  console.log('Dispatcher:'+ action);
   if(action == 'init'){
     reddit(action,page,function(err, body){
       if(err) console.log(err);
-      console.log(body);
+      //console.log(body);
+    });
+  }
+
+  if(action == 'fetch'){
+    reddit(action, page, function(err,body){
+      if(err) console.log(err);
+      console.log('fetched');
     });
   }
 
