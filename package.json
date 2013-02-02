@@ -13,6 +13,7 @@
     "ecstatic": "~0.3.0",
     "director": "~1.1.8",
     "request": "~2.12.0",
-    "moment": "~1.7.2"
+    "moment": "~1.7.2",
+    "cheerio": "~0.10.6"
   }
 }
