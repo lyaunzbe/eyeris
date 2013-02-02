@@ -14,6 +14,7 @@
     "director": "~1.1.8",
     "request": "~2.12.0",
     "moment": "~1.7.2",
-    "cheerio": "~0.10.6"
+    "cheerio": "~0.10.6",
+    "underscore": "~1.4.4"
   }
 }

@@ -1,6 +1,7 @@
 var request = require('request'),
     moment  = require('moment'),
-    cheerio = require('cheerio');
+    cheerio = require('cheerio'),
+    _       = require('underscore');
 
 
 var scrapeLobster = function(callback){
@@ -68,13 +69,13 @@ var hn = function(action, page, callback){
       opts.uri = 'http://hndroidapi.appspot.com/news2';
       request.get(opts, function(e,r, news2){
         if(e) callback(e);
+        news1.items.pop();
+        news2.items.pop();
         cache.hn.body.push(news1.items);
         cache.hn.body.push(news2.items);
 
         //flattens arrays nested 1 level deep [[x][y]]
-        cache.hn.body = Array.prototype.concat.apply([], cache.hn.body);
-        
-        cache.hn.body.pop();
+        cache.hn.body = _.flatten(cache.hn.body);
 
         callback(null, cache.hn.body);
       });
@@ -94,7 +95,7 @@ var dispatch = function(page, action){
     //console.log(body);
     hn(action, page, function(err, body){
       if(err) console.log(err);
-      //console.log(body);
+      console.log(body.length);
     });
   });
   

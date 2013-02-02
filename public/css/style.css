@@ -1,0 +1,87 @@
+
+@-webkit-keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  to { 
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+
+body,html{
+  background-color:rgb(236, 238, 241);
+}
+
+#container{
+  width:860px;
+  margin:0 auto;
+}
+
+header{
+  width:100%;
+  background-color:#242A38;
+  border
+}
+
+header #eye{
+  display:block;
+  margin:0 auto;
+  fill:rgb(236, 238, 241);
+  width:55px;
+  height:55px;
+  padding-top:20px;
+  padding-bottom:20px;
+}
+
+header #eye:hover{
+  fill:rgb(236, 238, 241);
+  -webkit-animation-name:             rotate; 
+    -webkit-animation-duration:         0.7s; 
+    -webkit-animation-iteration-count:  1;
+    -webkit-animation-timing-function: easeInOut;
+}
+
+#c_wrap{
+  background-color:silver;
+  padding:25px;  
+}
+
+#content{
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+
+#content li{
+  height:45px;
+  background-color:rgb(251, 251, 251);
+  border-bottom:1px solid rgb(172, 172, 172);
+  font-family: 'Ubuntu', sans-serif;
+  font-weight:700;
+  font-size:22px;
+  line-height:20px;
+  padding-top:28px;
+  padding-bottom:28px;
+  padding-left:50px;
+  color:rgba(36, 42, 56, 1);
+ 
+}
+
+#content li .title{
+  text-decoration:none;
+  color:rgba(36, 42, 56, 1);
+}
+
+#content li .title:hover{
+  color:rgba(36, 42, 56, .7);
+  
+}
+
+#content li .info{
+  margin-top: 7px;
+  font-size: 12px;
+  font-family: "Helvetica Neue", Helvetica;
+  font-weight: 200;
+    
+}
