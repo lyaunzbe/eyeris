@@ -6,7 +6,7 @@ var union = require('union'),
 
 var mc = require('./mission-control');
 
-//mc.dispatch(0, 'init');
+mc.dispatch(0, 'init');
 
 var router = new director.http.Router(routes);    
 

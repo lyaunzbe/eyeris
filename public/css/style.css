@@ -20,7 +20,7 @@ body,html{
 
 header{
   width:100%;
-  background-color:#242A38;
+  background-color:#4a5781;
   border
 }
 
@@ -85,3 +85,9 @@ header #eye:hover{
   font-weight: 200;
     
 }
+
+#content li .info .sep{
+  margin-left:3px;
+  margin-right:3px;
+}
+

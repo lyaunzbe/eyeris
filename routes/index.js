@@ -5,7 +5,9 @@ function getPage(page){
   if(!page){
     page = 0;
   }
-  mc.dispatch(page,'fetch');
+  mc.dispatch(page,'fetch', function(err, body){
+    res.send(body);
+  });
   
 }
 

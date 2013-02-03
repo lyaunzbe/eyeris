@@ -92,7 +92,7 @@ var dispatch = function(page, action){
   console.log('Dispatcher:'+ action);
   reddit(action,page,function(err, body){
     if(err) console.log(err);
-    //console.log(body);
+    console.log(body);
     hn(action, page, function(err, body){
       if(err) console.log(err);
       console.log(body.length);
