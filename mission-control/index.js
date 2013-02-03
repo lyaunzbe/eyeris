@@ -16,6 +16,21 @@ var request = require('request'),
   //});
 //};
 
+/**
+ *
+ * POST MODEL
+ */
+
+function Post(opts){
+  this.title = opts.title;
+  this.url = opts.url;
+  this.permalink = opts.permalink;
+  this.num_comments = opts.num_comments;
+  this.score = opts.score;
+  this.create_ts = opts.create_ts;
+  this.author = opts.author;
+}
+
 
 var cache = {
   reddit: {},
@@ -43,7 +58,22 @@ var reddit = function(action, page, callback){
       }
     };
     request.get(opts, function(e,r,body){
-      cache.reddit.body = body.data.children;
+      var children = body.data.children;
+      var result = [];
+      _.each(children, function(post){
+        result.push(new Post({
+          origin: 'reddit',
+          title: post.data.title,
+          url: post.data.url,
+          permalink: post.data.permalink,
+          num_comments: post.data.num_comments,
+          score: post.data.score,
+          create_ts: post.data.created,
+          author: post.data.author
+        }));
+      });
+
+      cache.reddit.body = result;
       cache.reddit.lastReq = moment(new Date());
 
 
@@ -52,15 +82,15 @@ var reddit = function(action, page, callback){
         console.log('Reddit Initialized!');
         callback(null);    
       }else{
-        var result = cache.reddit.body.slice(count, count+5);      
-        callback(null, result);    
+        var final  = cache.reddit.body.slice(count, count+5);
+        callback(null, final);    
       }
     });
 
   }else{
     console.log('Reddit - Using Cache');
-    var result = cache.reddit.body.slice(count, count+5);    
-    callback(null, result);        
+    var final = cache.reddit.body.slice(count, count+5);    
+    callback(null, final);        
   }
 };
 
@@ -96,25 +126,49 @@ var hn = function(action, page, callback){
         news2.items.pop();
         cache.hn.body.push(news1.items);
         cache.hn.body.push(news2.items);
-
-        //flattens arrays nested 1 level deep [[x][y]]
-        cache.hn.body = _.flatten(cache.hn.body);
-        cache.hn.lastReq = moment(new Date());
         
+        //flattens arrays nested 1 level deep [[x][y]]
+
+        var flat = _.flatten(cache.hn.body);
+        var result = [];
+        _.each(flat, function(post){
+          result.push(new Post({
+            origin: 'hn',
+            title: post.title,
+            url: post.url,
+            permalink: 'http://news.ycombinator.com/item?id='+post.item_id,
+            num_comments: (function(){
+              if(post.comments)
+                return post.comments.split(" ")[0];
+              else 
+                return false;
+            })(),
+            score: (function(){
+              if(post.score)
+                return post.score.split(" ")[0];
+              else
+                return false;
+            })(),
+            create_ts: post.time,
+            author: post.user || ''
+          }));
+        });
+
+        cache.hn.body = result;
+        cache.hn.lastReq = moment(new Date());
         if(action == 'init') {
           console.log('HN Initialized!');
           callback(null);    
         }else{
-          var result = cache.hn.body.slice(count, count+5);        
-          callback(null, result);
-
+          var final = cache.hn.body.slice(count, count+5);        
+          callback(null, final);
         }
-    });
-
+      });
   }else{
-    var result = cache.hn.body.slice(count, count+5);
+    var final = cache.hn.body.slice(count, count+5);
+    console.log(final);
     console.log('HN - Using Cache');     
-    callback(null, result);
+    callback(null, final);
   }
   
 };
@@ -137,7 +191,8 @@ var dispatch = function(page, action, callback){
       hn(action, page, function(err, hn_res){
         if(err) callback(err);
         var result  = reddit_res.concat(hn_res);
-        console.log(result.length);
+        result = _.shuffle(result);
+        console.log(result);
         callback(null, result); 
       });
     });
