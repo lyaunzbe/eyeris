@@ -6,9 +6,10 @@
     tagName:  'li',
 
     // Cache the template function for a single item.
-    //template: _.template( $('#post-template').html() ),
+    template: _.template( $('#post-template').html() ),
 
     initialize: function() {
+      console.log( $('#post-template').html() );
       this.model.on( 'change', this.render, this );
     },
 
@@ -17,4 +18,3 @@
       return this;
     }
  });
- 

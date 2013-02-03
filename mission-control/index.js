@@ -15,6 +15,10 @@ var request = require('request'),
     //callback(body);
   //});
 //};
+    
+function sanitize(string){
+  return string.replace('&euro;&trade;', '\'');
+}
 
 /**
  *
@@ -68,7 +72,7 @@ var reddit = function(action, page, callback){
           permalink: post.data.permalink,
           num_comments: post.data.num_comments,
           score: post.data.score,
-          create_ts: post.data.created,
+          create_ts: moment.unix(post.data.created_utc).from(moment.utc()),
           author: post.data.author
         }));
       });
@@ -120,6 +124,7 @@ var hn = function(action, page, callback){
       }},
       function(err, results) {
         if(err) callback(err);
+        cache.hn.body = [];
         var news1 = results.news1;
         var news2 = results.news2;
         news1.items.pop();
@@ -134,18 +139,19 @@ var hn = function(action, page, callback){
         _.each(flat, function(post){
           result.push(new Post({
             origin: 'hn',
-            title: post.title,
+            title: sanitize(post.title),
             url: post.url,
             permalink: 'http://news.ycombinator.com/item?id='+post.item_id,
             num_comments: (function(){
               if(post.comments)
-                return post.comments.split(" ")[0];
+                return parseInt(post.comments.split(" ")[0]);
               else 
                 return false;
             })(),
             score: (function(){
+              console.log(post.score);
               if(post.score)
-                return post.score.split(" ")[0];
+                return parseInt(post.score.split(" ")[0]);
               else
                 return false;
             })(),

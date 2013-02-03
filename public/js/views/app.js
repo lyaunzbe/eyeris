@@ -3,7 +3,6 @@
   
   // Our overall **AppView** is the top-level piece of UI.
   app.AppView = Backbone.View.extend({
-    el: '#content',
 
     events: {
 
@@ -14,9 +13,14 @@
       var that = this;
       app.page = 0; 
       this.posts = new app.Posts();
-      this.posts.fetch({success: function(){
-        console.log(that.posts.toJSON());
+
+      this.postsView = new app.PostsView({collection: this.posts});
+
+      this.posts.fetch({ success:function(){
+        $('#main').html(that.postsView.render().el);
       }});
+
+      
 
     }
   });
