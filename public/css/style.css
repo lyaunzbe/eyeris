@@ -16,12 +16,14 @@ body,html{
 #container{
   width:860px;
   margin:0 auto;
+  border-left:1px solid rgb(172, 172, 172);
+  border-right:1px solid rgb(172, 172, 172);
+  
 }
 
 header{
   width:100%;
   background-color:#4a5781;
-  border
 }
 
 header #eye{
@@ -70,11 +72,11 @@ header #eye:hover{
 
 #content li .title{
   text-decoration:none;
-  color:rgba(36, 42, 56, 1);
+  color:rgba(36, 42, 56, .8);
 }
 
 #content li .title:hover{
-  color:rgba(36, 42, 56, .7);
+  color:rgba(36, 42, 56, .5);
   
 }
 
